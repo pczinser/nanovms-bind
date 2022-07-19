@@ -19,7 +19,7 @@ jobs:
 
       # Runs a single command using the runners shell
       - name: Install dependencies
-        run: sudo apt install -y pkg-config libtool autoconf libuv1-dev libnghttp2-dev libssl make
+        run: sudo apt install -y pkg-config libtool autoconf libuv1-dev libnghttp2-dev libssl-dev make
 
       - name: Clone stable BIND9
         run: git clone --branch v9_18 https://gitlab.isc.org/isc-projects/bind9.git
