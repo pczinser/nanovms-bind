@@ -28,4 +28,25 @@ jobs:
         run: cd bind9 && autoreconf -fi
 
       - name: configure
-        run: pwd
+        run: cd bind9 && ./configure --disable-linux-caps
+
+      - name: make
+        run: cd bind9 && make
+        
+      - name: move compiled libraries
+        run: sudo find /home/vagrant/bind9/ -name *.so -type f -exec cp {} /usr/lib/x86_64-linux-gnu/ \;
+        
+      - name: set up nanos package file structure
+        run: |
+          mkdir -p sysroot/lib/x86_64-linux-gnu
+          mkdir -p sysroot/lib64/
+          mkdir -p sysroot/usr/lib/x86_64-linux-gnu
+          mkdir -p sysroot/usr/local/etc
+          mkdir -p sysroot/usr/local/var/run/named
+          
+      - name: move linux so to NanosVM package
+        run: cp /lib64/ld-linux-x86-64.so.2 sysroot/lib64/ld-linux-x86-64.so.2 && ls sysroot/lib64/ld-linux-x86-64.so.2
+        
+      - name: see dependencies
+        run: ldd bind9/bin/named/.libs/named | cut  -d ' ' -f 1 | grep -v / | grep -v vdso | sed 's/^[[:space:]]*//g'
+
