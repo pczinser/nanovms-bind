@@ -25,28 +25,56 @@ jobs:
         run: git clone --branch v9_18 https://gitlab.isc.org/isc-projects/bind9.git
         
       - name: autoconf 
-        run: cd bind9 && autoreconf -fi
-
+        run: cd $GITHUB_WORKSPACE/bind9 && autoreconf -fi
+        
+        # No linux capabilities on nanos
       - name: configure
-        run: cd bind9 && ./configure --disable-linux-caps
+        run: cd $GITHUB_WORKSPACE/bind9 && ./configure --disable-linux-caps
 
       - name: make
-        run: cd bind9 && make
+        run: cd $GITHUB_WORKSPACE/bind9 && make
         
       - name: move compiled libraries
-        run: sudo find bind9/ -name *.so -type f -exec cp {} /usr/lib/x86_64-linux-gnu/ \;
+        run: sudo find $GITHUB_WORKSPACE/bind9/ -name *.so -type f -exec cp {} /usr/lib/x86_64-linux-gnu/ \;
         
       - name: set up nanos package file structure
         run: |
-          mkdir -p sysroot/lib/x86_64-linux-gnu
-          mkdir -p sysroot/lib64/
-          mkdir -p sysroot/usr/lib/x86_64-linux-gnu
-          mkdir -p sysroot/usr/local/etc
-          mkdir -p sysroot/usr/local/var/run/named
+          mkdir -p $GITHUB_WORKSAPCE/sysroot/lib/x86_64-linux-gnu
+          mkdir -p $GITHUB_WORKSAPCE/sysroot/lib64/
+          mkdir -p $GITHUB_WORKSAPCE/sysroot/usr/lib/x86_64-linux-gnu
+          mkdir -p $GITHUB_WORKSAPCE/sysroot/usr/local/etc
+          mkdir -p $GITHUB_WORKSAPCE/sysroot/usr/local/var/run/named
           
-      - name: move linux so to NanosVM package
-        run: cp /lib64/ld-linux-x86-64.so.2 sysroot/lib64/ld-linux-x86-64.so.2 && ls sysroot/lib64/ld-linux-x86-64.so.2
+      - name: move linux so to NanosVM Package
+        run: cp /lib64/ld-linux-x86-64.so.2 $GITHUB_WORKSPACE/sysroot/lib64/ld-linux-x86-64.so.2 && ls $GITHUB_WORKSPACE/sysroot/lib64/ld-linux-x86-64.so.2
         
-      - name: see dependencies
-        run: ldd bind9/bin/named/.libs/named | cut  -d ' ' -f 1 | grep -v / | grep -v vdso | sed 's/^[[:space:]]*//g'
-
+      - name: create dependency list
+        run: ldd bind9/bin/named/.libs/named | cut  -d ' ' -f 1 | grep -v / | grep -v vdso | sed 's/^[[:space:]]*//g' > $GITHUB_WORKSPACE/deps.txt
+        
+      - name: put dependicies in NanosVM Package
+        run: while read i; do find /usr/ -name $i -exec cp -r {} $GITHUB_WORKSPACE/sysroot{} \;;done < $GITHUB_WORKSAPCE/deps.txt
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
