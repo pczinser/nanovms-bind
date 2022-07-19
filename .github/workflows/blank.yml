@@ -34,7 +34,7 @@ jobs:
         run: cd bind9 && make
         
       - name: move compiled libraries
-        run: sudo find /home/vagrant/bind9/ -name *.so -type f -exec cp {} /usr/lib/x86_64-linux-gnu/ \;
+        run: sudo find bind9/ -name *.so -type f -exec cp {} /usr/lib/x86_64-linux-gnu/ \;
         
       - name: set up nanos package file structure
         run: |
