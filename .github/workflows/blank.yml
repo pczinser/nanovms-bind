@@ -52,7 +52,7 @@ jobs:
         run: ldd $GITHUB_WORKSPACE/bind9/bin/named/.libs/named | grep -v vdso | grep -v ld-linux-x86-64.so | sed 's/^[[:space:]]*//g' | cut -d ' ' -f 3 > $GITHUB_WORKSPACE/deps.txt
         
       - name: put dependicies in NanosVM Package
-        run: while read i; do  cp -r $i $GITHUB_WORKSPACE/sysroot$i \;;done < $GITHUB_WORKSPACE/deps.txt
+        run: while read i; do  cp -r $i $GITHUB_WORKSPACE/sysroot$i;done < $GITHUB_WORKSPACE/deps.txt
         
       - name: check package
         run: ls -r $GITHUB_WORKSPACE/sysroot/*/*/*
