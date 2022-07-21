@@ -49,7 +49,7 @@ jobs:
         run: cp /lib64/ld-linux-x86-64.so.2 $GITHUB_WORKSPACE/sysroot/lib64/ld-linux-x86-64.so.2 && ls $GITHUB_WORKSPACE/sysroot/lib64/ld-linux-x86-64.so.2
         
       - name: create dependency list
-        run: ldd /usr/local/sbin/named | grep -v vdso | grep -v ld-linux-x86-64.so | sed 's/^[[:space:]]*//g' | cut -d ' ' -f 3 > $GITHUB_WORKSPACE/deps.txt
+        run: ldd $GITHUB_WORKSPACE/bind9/bin/named/.libs/named | grep -v vdso | grep -v ld-linux-x86-64.so | sed 's/^[[:space:]]*//g' | cut -d ' ' -f 3 > $GITHUB_WORKSPACE/deps.txt
         
       - name: put dependicies in NanosVM Package
         run: while read i; do  cp -r $i $GITHUB_WORKSPACE/sysroot$i \;;done < $GITHUB_WORKSPACE/deps.txt
