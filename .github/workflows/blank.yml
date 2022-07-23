@@ -36,14 +36,7 @@ jobs:
         
       - name: move compiled libraries
         run: sudo find $GITHUB_WORKSPACE/bind9/ -name *.so -type f -exec cp {} /usr/lib/x86_64-linux-gnu/ \;
-              
-      - name: set up nanos package file structure
-        run: |
-          mkdir -p $GITHUB_WORKSPACE/sysroot/lib/x86_64-linux-gnu
-          mkdir -p $GITHUB_WORKSPACE/sysroot/lib64/
-          mkdir -p $GITHUB_WORKSPACE/sysroot/usr/local/etc
-          mkdir -p $GITHUB_WORKSPACE/sysroot/usr/local/var/run/named
-          
+                        
       - name: move linux so to NanosVM Package
         run: cp /lib64/ld-linux-x86-64.so.2 $GITHUB_WORKSPACE/sysroot/lib64/ld-linux-x86-64.so.2 && ls $GITHUB_WORKSPACE/sysroot/lib64/ld-linux-x86-64.so.2
         
@@ -59,3 +52,5 @@ jobs:
       - name: install ops
         run: curl https://ops.city/get.sh -sSfL | sh
       
+      - name: test ops
+        run: ops pkg search bind
