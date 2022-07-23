@@ -53,4 +53,4 @@ jobs:
         run: curl https://ops.city/get.sh -sSfL | sh
       
       - name: test ops
-        run: ops pkg search bind
+        run: $HOME/.ops/bin/ops pkg search bind
