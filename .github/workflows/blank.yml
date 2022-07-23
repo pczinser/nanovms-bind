@@ -36,10 +36,7 @@ jobs:
         
       - name: move compiled libraries
         run: sudo find $GITHUB_WORKSPACE/bind9/ -name *.so -type f -exec cp {} /usr/lib/x86_64-linux-gnu/ \;
-        
-      - name: move compiled libraries
-        run:  ldd $GITHUB_WORKSPACE/bind9/bin/named/.libs/named
-        
+              
       - name: set up nanos package file structure
         run: |
           mkdir -p $GITHUB_WORKSPACE/sysroot/lib/x86_64-linux-gnu
@@ -59,27 +56,6 @@ jobs:
       - name: check package
         run: ls -r $GITHUB_WORKSPACE/sysroot/*/*/*
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+      - name: install ops
+        run: curl https://ops.city/get.sh -sSfL | sh
+      
