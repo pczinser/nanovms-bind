@@ -53,10 +53,13 @@ jobs:
         run: find $GITHUB_WORKSPACE/sysroot -name .keep -exec rm -f {} \;
         
       - name: tar up NanoVM package
-        run: tar zvcf named-9.18.6.tar.gz package.manifest README.md named sysroot/
+        run: tar zvcf named_9.18.6.tar.gz package.manifest README.md named sysroot/
         
       - name: install ops
         run: curl https://ops.city/get.sh -sSfL | sh
       
       - name: test ops
-        run: $HOME/.ops/bin/ops pkg add $GITHUB_WORKSPACE/named-9.18.6.tar.gz
+        run: $HOME/.ops/bin/ops pkg add --name named_9.18.6 $GITHUB_WORKSPACE/named_9.18.6.tar.gz
+      
+      - name: login to ops
+        run: $HOME/.ops/bin/ops pkg login ${{ secrets.OPS_REPO_KEY }} && $HOME/.ops/bin/ops pkg push named_9.18.6
