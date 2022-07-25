@@ -37,17 +37,20 @@ jobs:
       - name: move compiled libraries
         run: sudo find $GITHUB_WORKSPACE/bind9/ -name *.so -type f -exec cp {} /usr/lib/x86_64-linux-gnu/ \;
                         
-      - name: move linux so to NanosVM Package
+      - name: move linux so to NanoVM package
         run: cp /lib64/ld-linux-x86-64.so.2 $GITHUB_WORKSPACE/sysroot/lib64/ld-linux-x86-64.so.2 && ls $GITHUB_WORKSPACE/sysroot/lib64/ld-linux-x86-64.so.2
         
       - name: create dependency list
         run: ldd $GITHUB_WORKSPACE/bind9/bin/named/.libs/named | grep -v vdso | grep -v ld-linux-x86-64.so | sed 's/^[[:space:]]*//g' | cut -d ' ' -f 3 > $GITHUB_WORKSPACE/deps.txt
         
-      - name: put dependicies in NanosVM Package
+      - name: put dependicies in NanoVM package
         run: while read i; do  cp -r $i $GITHUB_WORKSPACE/sysroot$i;done < $GITHUB_WORKSPACE/deps.txt
         
-      - name: check package
-        run: ls -r $GITHUB_WORKSPACE/sysroot/*/*/*
+      - name: put binary in NanoVM package
+        run: cp $GITHUB_WORKSPACE/bind9/bin/named/.libs/named $GITHUB_WORKSPACE/
+        
+      - name: tar up NanoVM package
+        run: tar zvcf named-9.18.6.tar.gz package.manifest README.md named sysroot/
         
       - name: install ops
         run: curl https://ops.city/get.sh -sSfL | sh
