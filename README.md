@@ -2,6 +2,9 @@
 
 This package is the BIND DNS server named in a nanovms unikernel.
 
+
+If you run into problems you can submit an issue at https://github.com/pczinser/nanovms-bind .
+
 ## Configuration:
 
 By default this will run the DNS server on port 53. If you want to test and already have something listening on 53 you will need to change that in the package.manifest or with a config.json
