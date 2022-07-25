@@ -49,6 +49,9 @@ jobs:
       - name: put binary in NanoVM package
         run: cp $GITHUB_WORKSPACE/bind9/bin/named/.libs/named $GITHUB_WORKSPACE/
         
+      - name: clean git artifacts from NanoVM package
+        run: find $GITHUB_WORKSPACE/sysroot -name .keep -exec rm -f {} \;
+        
       - name: tar up NanoVM package
         run: tar zvcf named-9.18.6.tar.gz package.manifest README.md named sysroot/
         
@@ -56,4 +59,4 @@ jobs:
         run: curl https://ops.city/get.sh -sSfL | sh
       
       - name: test ops
-        run: $HOME/.ops/bin/ops pkg search bind
+        run: $HOME/.ops/bin/ops pkg add $GITHUB_WORKSPACE/named-9.18.6.tar.gz
