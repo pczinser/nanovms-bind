@@ -58,8 +58,11 @@ jobs:
       - name: install ops
         run: curl https://ops.city/get.sh -sSfL | sh
       
-      - name: test ops
+      - name: Add NanoVM package to local OPS repo
         run: $HOME/.ops/bin/ops pkg add --name named_9.18.6 $GITHUB_WORKSPACE/named_9.18.6.tar.gz
+        
+      - name: test local NanoVM package
+        run: $HOME/.ops/bin/ops pkg contents --local named_9.18.6
               
-      - name: login to ops
-        run: $HOME/.ops/bin/ops pkg login ${{ secrets.OPS_REPO_KEY }} && $HOME/.ops/bin/ops pkg push named_9.18.6
+      #- name: login to ops
+      #  run: $HOME/.ops/bin/ops pkg login ${{ secrets.OPS_REPO_KEY }} && $HOME/.ops/bin/ops pkg push named_9.18.6
